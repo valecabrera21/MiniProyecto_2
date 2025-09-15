@@ -380,8 +380,18 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#librerias"><strong>Librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-base-de-datos"><strong>Sobre la base de datos</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-las-variables"><strong>Sobre las variables</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precio"><strong>Precio</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precio"><strong>Precio</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estadisticas-descriptivas"><strong>Estadísticas descriptivas</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-de-los-datos"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#picos"><strong>Picos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#serie-temporal"><strong>Serie temporal</strong></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retornos-logaritmicos"><strong>Retornos logarítmicos</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Estadísticas descriptivas</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>Picos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Serie temporal</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacion-acf-de-los-retornos-retornolog"><strong>Autocorrelación (ACF) de los retornos (RetornoLog)</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacion-acf-de-los-cuadrados-de-los-retornos-retornolog"><strong>Autocorrelación (ACF) de los cuadrados de los retornos (RetornoLog)</strong></a></li>
 </ul>
@@ -391,7 +401,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-y-calculo-de-features"><strong>Preprocesamiento y cálculo de features</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-retornos-logaritmicos"><strong>Cálculo de retornos logarítmicos</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-la-volatilidad-historica-variable-objetivo"><strong>Cálculo de la volatilidad histórica (variable objetivo)</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-variable"><strong>Sobre la variable</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-variable"><strong>Sobre la variable</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidades-por-ventanas"><strong>Volatilidades por ventanas</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-precio-con-volatilidad-por-ventanas"><strong>Correlación de Precio con Volatilidad (por ventanas)</strong></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generacion-de-lags-del-precio-ventanas-previas-para-los-siguientes-tamanos-7-14-21-28-dias"><strong>Generación de lags del precio (ventanas previas) para los siguientes tamaños: 7, 14, 21, 28 días</strong></a></li>
@@ -770,6 +785,8 @@ document.write(`
 <h2><strong>Sobre las variables</strong><a class="headerlink" href="#sobre-las-variables" title="Link to this heading">#</a></h2>
 <section id="precio">
 <h3><strong>Precio</strong><a class="headerlink" href="#precio" title="Link to this heading">#</a></h3>
+<section id="estadisticas-descriptivas">
+<h4><strong>Estadísticas descriptivas</strong><a class="headerlink" href="#estadisticas-descriptivas" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -791,6 +808,9 @@ Name: Precio, dtype: float64
 </div>
 </div>
 <p>A partir de las estadísticas descriptivas de la variable <code class="docutils literal notranslate"><span class="pre">Precio</span></code>, se pueden identificar distintas características sobre su comportamiento. En primer lugar, se observa que la media (<strong>29096.25 USD</strong>) es superior a la mediana (<strong>22762.52 USD</strong>), lo que indica la existencia de una asimetría positiva, es decir, sesgo a la derecha en la distribución de los datos. Asimismo, el alto valor de la desviación estándar (<strong>23578.75 USD</strong>) da indicios de una considerable dispersión presente, lo cual podemos evidenciar igualmente en la diferencia de valores entre los extremos (<strong>3211.72 USD</strong> y <strong>106143.82 USD</strong>) y los cuartiles.</p>
+</section>
+<section id="distribucion-de-los-datos">
+<h4><strong>Distribución de los datos</strong><a class="headerlink" href="#distribucion-de-los-datos" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_precio</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
@@ -827,6 +847,9 @@ Name: Precio, dtype: float64
 </div>
 </div>
 <p>El estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>1.0394</strong>, lo que confirma una marcada asimetría positiva en la distribución de los precios. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la derecha.</p>
+</section>
+<section id="picos">
+<h4><strong>Picos</strong><a class="headerlink" href="#picos" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fecha_max_precio</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
@@ -847,6 +870,9 @@ Name: Precio, dtype: float64
 </div>
 </div>
 </div>
+</section>
+<section id="serie-temporal">
+<h4><strong>Serie temporal</strong><a class="headerlink" href="#serie-temporal" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adftest</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
@@ -889,8 +915,11 @@ Name: Precio, dtype: float64
 </div>
 <p>La serie temporal del precio de cierre de Bitcoin evidencia gráficamente el resultado del test de Dickey-Fuller, que concluyó que la serie es <strong>no</strong> estacionaria.</p>
 </section>
+</section>
 <section id="retornos-logaritmicos">
 <h3><strong>Retornos logarítmicos</strong><a class="headerlink" href="#retornos-logaritmicos" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h4><strong>Estadísticas descriptivas</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -912,6 +941,9 @@ Name: RetornoLog, dtype: float64
 </div>
 </div>
 <p>Al analizar las estadísticas de los retornos logarítmicos se observa que tanto la media (<strong>0.0006</strong>) como la mediana (<strong>0.0007</strong>) son prácticamente cero, lo que indica que la serie se comporta de manera estacionaria. Por otro lado, la desviación estándar muestra que los retornos presentan una variación típica de <strong>3.62%</strong> por día. Finalmente, los valores mínimo (<strong>-0.50</strong>) y máximo (<strong>0.17</strong>) evidencian que, si bien la mayor parte de los datos se concentra en torno a ese comportamiento estable, existen días con fluctuaciones mucho más pronunciadas.</p>
+</section>
+<section id="id2">
+<h4><strong>Distribución de los datos</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_retlog</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
@@ -948,6 +980,9 @@ Name: RetornoLog, dtype: float64
 </div>
 </div>
 <p>El estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>-1.1582</strong>, lo que confirma una marcada asimetría negativa en la distribución de los retornos logarítmicos. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la izquierda.</p>
+</section>
+<section id="id3">
+<h4><strong>Picos</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">peor_dia</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmin</span><span class="p">()</span>
@@ -968,6 +1003,9 @@ Name: RetornoLog, dtype: float64
 </div>
 </div>
 </div>
+</section>
+<section id="id4">
+<h4><strong>Serie temporal</strong><a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adftest</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
@@ -1020,6 +1058,7 @@ La serie es ESTACIONARIA (p-value &lt;= 0.05)
 </div>
 </div>
 </div>
+</section>
 <section id="autocorrelacion-acf-de-los-retornos-retornolog">
 <h4><strong>Autocorrelación (ACF) de los retornos (RetornoLog)</strong><a class="headerlink" href="#autocorrelacion-acf-de-los-retornos-retornolog" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
@@ -1499,6 +1538,8 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <p>En la tabla resultante se observa que cada ventana presenta valores faltantes al inicio. Esto sucede porque, por ejemplo, en la ventana de 7 días no se pueden calcular los primeros 7 retornos, en la de 14 días las primeras 14 observaciones, y así sucesivamente. Esto era esperado, ya que el cálculo de la desviación estándar móvil necesita acumular suficientes observaciones previas para poder hacerse. Por lo tanto, las primeras filas no tienen información suficiente y aparecen como nulas. Estos valores ausentes se tendrán en cuenta al momento de implementar los modelos, indicando desde qué observación debe comenzar cada ventana.</p>
 <section id="sobre-la-variable">
 <h4><strong>Sobre la variable</strong><a class="headerlink" href="#sobre-la-variable" title="Link to this heading">#</a></h4>
+<section id="id5">
+<h5><strong>Distribución de los datos</strong><a class="headerlink" href="#id5" title="Link to this heading">#</a></h5>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_results</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1579,6 +1620,26 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 </div>
 <p>En todas las ventanas temporales analizadas, el valor de la asimetría resulta positivo, con valores que van desde <strong>2.93</strong> en la ventana de 7 días hasta <strong>2.14</strong> en la de 28 días. Esta asimetría positiva muestra que la distribución de la volatilidad y presenta una cola pesada hacia la derecha. Lo anterior se evidencia también en los histogramas graficados para cada ventana. Además, se observa una disminución progresiva a medida que aumenta la ventana, lo cual sugiere que los eventos extremos de alta volatilidad tienen mayor impacto en los plazos cortos, pero se suavizan al calcular promedios en horizontes más largos.</p>
+</section>
+<section id="volatilidades-por-ventanas">
+<h5><strong>Volatilidades por ventanas</strong><a class="headerlink" href="#volatilidades-por-ventanas" title="Link to this heading">#</a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temporal</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="n">volatilidad_cols</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+<span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">temporal</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;crest&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.2f&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Correlación entre volatilidades (7, 14, 21, 28 días)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/a7580d4f0a44f8095386e3da436f3ab7e48521a1f6d6fd93590bb723ba859225.png" src="_images/a7580d4f0a44f8095386e3da436f3ab7e48521a1f6d6fd93590bb723ba859225.png" />
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#8ecae6&#39;</span><span class="p">,</span> <span class="s1">&#39;#023047&#39;</span><span class="p">,</span> <span class="s1">&#39;#dd1c1a&#39;</span><span class="p">,</span> <span class="s1">&#39;#fb8500&#39;</span><span class="p">]</span>
@@ -1605,6 +1666,9 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 <p>En este gráfico, donde se comparan las series de tiempo para cada ventana, se puede observar de manera clara lo mencionado anteriormente. A menor plazo, mayor es la variación en la volatilidad. En particular, la serie en azul claro, correspondiente a la ventana de 7 días, es la que muestra los picos más marcados tanto en caídas como en subidas. Le sigue la ventana de 14 días, luego la de 21, y finalmente la de 28 días, que es la que presenta cambios más suaves en la volatilidad.</p>
 <p>De esta forma, se confirma gráficamente que los impactos en la volatilidad son más intensos cuando se consideran plazos más cortos.</p>
+</section>
+<section id="correlacion-de-precio-con-volatilidad-por-ventanas">
+<h5><strong>Correlación de Precio con Volatilidad (por ventanas)</strong><a class="headerlink" href="#correlacion-de-precio-con-volatilidad-por-ventanas" title="Link to this heading">#</a></h5>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resultados</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1661,6 +1725,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Precio vs Volatilidad Anualizada por Ventana de Días&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">volatilidad_cols</span><span class="p">,</span> <span class="n">ventanas</span><span class="p">):</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
         <span class="n">x</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">],</span>
         <span class="n">y</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
@@ -1670,7 +1735,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
     <span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Precio (USD)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Volatilidad Anualizada&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días (Correlación: </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1683,11 +1748,38 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Volatilidad Anualizada vs. Valor Absoluto de los Retornos&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">volatilidad_cols</span><span class="p">):</span>
+    <span class="c1"># Calcular la correlación para el título</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+    
+    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> (Correlación: </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Valor Absoluto de Retornos Logarítmicos&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Volatilidad </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b2b01dfb269008af6466be4b5ed67689c62490cb4ddd382d21f2bced162bc30e.png" src="_images/b2b01dfb269008af6466be4b5ed67689c62490cb4ddd382d21f2bced162bc30e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">databtc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
+</section>
 </section>
 </section>
 <section id="generacion-de-lags-del-precio-ventanas-previas-para-los-siguientes-tamanos-7-14-21-28-dias">
@@ -2447,8 +2539,18 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#librerias"><strong>Librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-base-de-datos"><strong>Sobre la base de datos</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-las-variables"><strong>Sobre las variables</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precio"><strong>Precio</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precio"><strong>Precio</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estadisticas-descriptivas"><strong>Estadísticas descriptivas</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-de-los-datos"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#picos"><strong>Picos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#serie-temporal"><strong>Serie temporal</strong></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retornos-logaritmicos"><strong>Retornos logarítmicos</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Estadísticas descriptivas</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>Picos</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Serie temporal</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacion-acf-de-los-retornos-retornolog"><strong>Autocorrelación (ACF) de los retornos (RetornoLog)</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacion-acf-de-los-cuadrados-de-los-retornos-retornolog"><strong>Autocorrelación (ACF) de los cuadrados de los retornos (RetornoLog)</strong></a></li>
 </ul>
@@ -2458,7 +2560,12 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-y-calculo-de-features"><strong>Preprocesamiento y cálculo de features</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-retornos-logaritmicos"><strong>Cálculo de retornos logarítmicos</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-la-volatilidad-historica-variable-objetivo"><strong>Cálculo de la volatilidad histórica (variable objetivo)</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-variable"><strong>Sobre la variable</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sobre-la-variable"><strong>Sobre la variable</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Distribución de los datos</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidades-por-ventanas"><strong>Volatilidades por ventanas</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-precio-con-volatilidad-por-ventanas"><strong>Correlación de Precio con Volatilidad (por ventanas)</strong></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generacion-de-lags-del-precio-ventanas-previas-para-los-siguientes-tamanos-7-14-21-28-dias"><strong>Generación de lags del precio (ventanas previas) para los siguientes tamaños: 7, 14, 21, 28 días</strong></a></li>
