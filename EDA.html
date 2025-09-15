@@ -405,6 +405,7 @@ document.write(`
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Distribución de los datos</strong></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidades-por-ventanas"><strong>Volatilidades por ventanas</strong></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-precio-con-volatilidad-por-ventanas"><strong>Correlación de Precio con Volatilidad (por ventanas)</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-la-volatilidad-por-ventanas-con-el-valor-absoluto-de-los-retornos-logaritmicos"><strong>Correlación de la Volatilidad (por ventanas) con el Valor Absoluto de los Retornos Logarítmicos</strong></a></li>
 </ul>
 </li>
 </ul>
@@ -435,6 +436,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">jarque_bera</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">pearsonr</span><span class="p">,</span> <span class="n">spearmanr</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.tsa.stattools</span><span class="w"> </span><span class="kn">import</span> <span class="n">adfuller</span>
@@ -813,6 +815,29 @@ Name: Precio, dtype: float64
 <h4><strong>Distribución de los datos</strong><a class="headerlink" href="#distribucion-de-los-datos" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jb_stat_precio</span><span class="p">,</span> <span class="n">jb_p_precio</span> <span class="o">=</span> <span class="n">jarque_bera</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico JB: </span><span class="si">{</span><span class="n">jb_stat_precio</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-valor: </span><span class="si">{</span><span class="n">jb_p_precio</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="k">if</span> <span class="n">jb_p_precio</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La serie NO sigue una distribución normal.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La serie podría seguir una distribución normal.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estadístico JB: 493.376
+P-valor: 7.3229e-108
+La serie NO sigue una distribución normal.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_precio</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Asimetría (Skewness): </span><span class="si">{</span><span class="n">skew_precio</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
@@ -846,7 +871,7 @@ Name: Precio, dtype: float64
 <img alt="_images/c58411fab01e20bdd2805ce343b23db6989b37525966840a98a2b643207a11a6.png" src="_images/c58411fab01e20bdd2805ce343b23db6989b37525966840a98a2b643207a11a6.png" />
 </div>
 </div>
-<p>El estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>1.0394</strong>, lo que confirma una marcada asimetría positiva en la distribución de los precios. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la derecha.</p>
+<p>En el test de normalidad, se rechazó la hipótesis nula, es decir, que los datos no siguen una distribución normal. Asimismo, el estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>1.0394</strong>, lo que confirma una marcada asimetría positiva en la distribución de los precios. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la derecha.</p>
 </section>
 <section id="picos">
 <h4><strong>Picos</strong><a class="headerlink" href="#picos" title="Link to this heading">#</a></h4>
@@ -913,7 +938,8 @@ Name: Precio, dtype: float64
 <img alt="_images/ee2cb52657747793b787c15de3722ea26f32763e91de0b8592255d9ca5ed2f42.png" src="_images/ee2cb52657747793b787c15de3722ea26f32763e91de0b8592255d9ca5ed2f42.png" />
 </div>
 </div>
-<p>La serie temporal del precio de cierre de Bitcoin evidencia gráficamente el resultado del test de Dickey-Fuller, que concluyó que la serie es <strong>no</strong> estacionaria.</p>
+<p>La serie temporal del precio de cierre de Bitcoin confirma lo mostrado por la prueba de Dickey-Fuller: la serie es <strong>no estacionaria</strong>.</p>
+<p>Entre 2018 y finales de 2020 el precio se mantuvo relativamente estable, con subidas y caídas que no fueron tan marcadas. En 2021 se dio una gran subida, aunque hacia la mitad del mismo año ocurrió una fuerte caída, de la cual el precio logró recuperarse poco después. Durante 2022 se presentó una caída constante que se prolongó hasta 2023. Desde entonces, se observa una tendencia de crecimiento sostenido que llega hasta el año 2025.</p>
 </section>
 </section>
 <section id="retornos-logaritmicos">
@@ -944,6 +970,29 @@ Name: RetornoLog, dtype: float64
 </section>
 <section id="id2">
 <h4><strong>Distribución de los datos</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jb_stat_retornos</span><span class="p">,</span> <span class="n">jb_p_retornos</span> <span class="o">=</span> <span class="n">jarque_bera</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico JB: </span><span class="si">{</span><span class="n">jb_stat_retornos</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-valor: </span><span class="si">{</span><span class="n">jb_p_retornos</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="k">if</span> <span class="n">jb_p_retornos</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La serie NO sigue una distribución normal.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La serie podría seguir una distribución normal.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estadístico JB: 31862.647
+P-valor: 0.0000e+00
+La serie NO sigue una distribución normal.
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_retlog</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
@@ -979,7 +1028,7 @@ Name: RetornoLog, dtype: float64
 <img alt="_images/a3a8c364003a767ee677d34f4d3a16861352ada958202bd0e80fdb5fdffa0987.png" src="_images/a3a8c364003a767ee677d34f4d3a16861352ada958202bd0e80fdb5fdffa0987.png" />
 </div>
 </div>
-<p>El estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>-1.1582</strong>, lo que confirma una marcada asimetría negativa en la distribución de los retornos logarítmicos. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la izquierda.</p>
+<p>En el test de normalidad, se rechazó la hipótesis nula, es decir, que los datos no siguen una distribución normal. Asimismo, el estadístico de asimetría (<code class="docutils literal notranslate"><span class="pre">Skewness</span></code>) dio como resultado <strong>-1.1582</strong>, lo que confirma una marcada asimetría negativa en la distribución de los retornos logarítmicos. Este resultado numérico es consistente con el histograma, donde se observa una clara cola extendida hacia la izquierda.</p>
 </section>
 <section id="id3">
 <h4><strong>Picos</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
@@ -1072,39 +1121,39 @@ La serie es ESTACIONARIA (p-value &lt;= 0.05)
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
-#T_bba07_row0_col0, #T_bba07_row0_col1, #T_bba07_row1_col0, #T_bba07_row1_col1, #T_bba07_row2_col0, #T_bba07_row2_col1, #T_bba07_row3_col0, #T_bba07_row3_col1 {
+#T_4762f_row0_col0, #T_4762f_row0_col1, #T_4762f_row1_col0, #T_4762f_row1_col1, #T_4762f_row2_col0, #T_4762f_row2_col1, #T_4762f_row3_col0, #T_4762f_row3_col1 {
   text-align: center;
   font-size: 12pt;
 }
 </style>
-<table id="T_bba07">
+<table id="T_4762f">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
-      <th id="T_bba07_level0_col0" class="col_heading level0 col0" >lb_stat</th>
-      <th id="T_bba07_level0_col1" class="col_heading level0 col1" >lb_pvalue</th>
+      <th id="T_4762f_level0_col0" class="col_heading level0 col0" >lb_stat</th>
+      <th id="T_4762f_level0_col1" class="col_heading level0 col1" >lb_pvalue</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th id="T_bba07_level0_row0" class="row_heading level0 row0" >7</th>
-      <td id="T_bba07_row0_col0" class="data row0 col0" >20.702615</td>
-      <td id="T_bba07_row0_col1" class="data row0 col1" >4.23615402e-03</td>
+      <th id="T_4762f_level0_row0" class="row_heading level0 row0" >7</th>
+      <td id="T_4762f_row0_col0" class="data row0 col0" >20.702615</td>
+      <td id="T_4762f_row0_col1" class="data row0 col1" >4.23615402e-03</td>
     </tr>
     <tr>
-      <th id="T_bba07_level0_row1" class="row_heading level0 row1" >14</th>
-      <td id="T_bba07_row1_col0" class="data row1 col0" >26.153238</td>
-      <td id="T_bba07_row1_col1" class="data row1 col1" >2.47495660e-02</td>
+      <th id="T_4762f_level0_row1" class="row_heading level0 row1" >14</th>
+      <td id="T_4762f_row1_col0" class="data row1 col0" >26.153238</td>
+      <td id="T_4762f_row1_col1" class="data row1 col1" >2.47495660e-02</td>
     </tr>
     <tr>
-      <th id="T_bba07_level0_row2" class="row_heading level0 row2" >21</th>
-      <td id="T_bba07_row2_col0" class="data row2 col0" >29.799477</td>
-      <td id="T_bba07_row2_col1" class="data row2 col1" >9.60921646e-02</td>
+      <th id="T_4762f_level0_row2" class="row_heading level0 row2" >21</th>
+      <td id="T_4762f_row2_col0" class="data row2 col0" >29.799477</td>
+      <td id="T_4762f_row2_col1" class="data row2 col1" >9.60921646e-02</td>
     </tr>
     <tr>
-      <th id="T_bba07_level0_row3" class="row_heading level0 row3" >28</th>
-      <td id="T_bba07_row3_col0" class="data row3 col0" >33.801536</td>
-      <td id="T_bba07_row3_col1" class="data row3 col1" >2.07484002e-01</td>
+      <th id="T_4762f_level0_row3" class="row_heading level0 row3" >28</th>
+      <td id="T_4762f_row3_col0" class="data row3 col0" >33.801536</td>
+      <td id="T_4762f_row3_col1" class="data row3 col1" >2.07484002e-01</td>
     </tr>
   </tbody>
 </table>
@@ -1144,39 +1193,39 @@ La serie es ESTACIONARIA (p-value &lt;= 0.05)
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
-#T_82955_row0_col0, #T_82955_row0_col1, #T_82955_row1_col0, #T_82955_row1_col1, #T_82955_row2_col0, #T_82955_row2_col1, #T_82955_row3_col0, #T_82955_row3_col1 {
+#T_6bf39_row0_col0, #T_6bf39_row0_col1, #T_6bf39_row1_col0, #T_6bf39_row1_col1, #T_6bf39_row2_col0, #T_6bf39_row2_col1, #T_6bf39_row3_col0, #T_6bf39_row3_col1 {
   text-align: center;
   font-size: 12pt;
 }
 </style>
-<table id="T_82955">
+<table id="T_6bf39">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
-      <th id="T_82955_level0_col0" class="col_heading level0 col0" >lb_stat</th>
-      <th id="T_82955_level0_col1" class="col_heading level0 col1" >lb_pvalue</th>
+      <th id="T_6bf39_level0_col0" class="col_heading level0 col0" >lb_stat</th>
+      <th id="T_6bf39_level0_col1" class="col_heading level0 col1" >lb_pvalue</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th id="T_82955_level0_row0" class="row_heading level0 row0" >7</th>
-      <td id="T_82955_row0_col0" class="data row0 col0" >48.819700</td>
-      <td id="T_82955_row0_col1" class="data row0 col1" >2.46116825e-08</td>
+      <th id="T_6bf39_level0_row0" class="row_heading level0 row0" >7</th>
+      <td id="T_6bf39_row0_col0" class="data row0 col0" >48.819700</td>
+      <td id="T_6bf39_row0_col1" class="data row0 col1" >2.46116825e-08</td>
     </tr>
     <tr>
-      <th id="T_82955_level0_row1" class="row_heading level0 row1" >14</th>
-      <td id="T_82955_row1_col0" class="data row1 col0" >58.348361</td>
-      <td id="T_82955_row1_col1" class="data row1 col1" >2.28080011e-07</td>
+      <th id="T_6bf39_level0_row1" class="row_heading level0 row1" >14</th>
+      <td id="T_6bf39_row1_col0" class="data row1 col0" >58.348361</td>
+      <td id="T_6bf39_row1_col1" class="data row1 col1" >2.28080011e-07</td>
     </tr>
     <tr>
-      <th id="T_82955_level0_row2" class="row_heading level0 row2" >21</th>
-      <td id="T_82955_row2_col0" class="data row2 col0" >67.151084</td>
-      <td id="T_82955_row2_col1" class="data row2 col1" >9.98336894e-07</td>
+      <th id="T_6bf39_level0_row2" class="row_heading level0 row2" >21</th>
+      <td id="T_6bf39_row2_col0" class="data row2 col0" >67.151084</td>
+      <td id="T_6bf39_row2_col1" class="data row2 col1" >9.98336894e-07</td>
     </tr>
     <tr>
-      <th id="T_82955_level0_row3" class="row_heading level0 row3" >28</th>
-      <td id="T_82955_row3_col0" class="data row3 col0" >70.046971</td>
-      <td id="T_82955_row3_col1" class="data row3 col1" >1.83309950e-05</td>
+      <th id="T_6bf39_level0_row3" class="row_heading level0 row3" >28</th>
+      <td id="T_6bf39_row3_col0" class="data row3 col0" >70.046971</td>
+      <td id="T_6bf39_row3_col1" class="data row3 col1" >1.83309950e-05</td>
     </tr>
   </tbody>
 </table>
@@ -1230,12 +1279,12 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ventanas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">28</span><span class="p">]</span>
-<span class="n">volatilidad_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">d&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">]</span>
-    
+
 <span class="k">for</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">:</span>
     <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">d&#39;</span>
     <span class="n">databtc</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">ventana</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span>
 
+<span class="n">volatilidad_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">d&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">]</span>
 <span class="n">databtc</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>        
 </pre></div>
 </div>
@@ -1542,6 +1591,65 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <h5><strong>Distribución de los datos</strong><a class="headerlink" href="#id5" title="Link to this heading">#</a></h5>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jb_resultados</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">volatilidad_cols</span><span class="p">:</span>
+    <span class="n">jb_stat</span><span class="p">,</span> <span class="n">jb_p_value</span> <span class="o">=</span> <span class="n">jarque_bera</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+    <span class="n">jb_resultados</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Estadístico JB&quot;</span><span class="p">:</span> <span class="n">jb_stat</span><span class="p">,</span>
+        <span class="s2">&quot;P-valor&quot;</span><span class="p">:</span> <span class="n">jb_p_value</span>
+    <span class="p">}</span>
+
+<span class="n">jb_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">jb_resultados</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">html_output_jb</span> <span class="o">=</span> <span class="n">jb_df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">set_properties</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;text-align&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;font-size&#39;</span><span class="p">:</span> <span class="s1">&#39;12pt&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">to_html</span><span class="p">()</span>
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html_output_jb</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_df9a1_row0_col0, #T_df9a1_row0_col1, #T_df9a1_row1_col0, #T_df9a1_row1_col1, #T_df9a1_row2_col0, #T_df9a1_row2_col1, #T_df9a1_row3_col0, #T_df9a1_row3_col1 {
+  text-align: center;
+  font-size: 12pt;
+}
+</style>
+<table id="T_df9a1">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_df9a1_level0_col0" class="col_heading level0 col0" >Estadístico JB</th>
+      <th id="T_df9a1_level0_col1" class="col_heading level0 col1" >P-valor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_df9a1_level0_row0" class="row_heading level0 row0" >Volatilidad_7d</th>
+      <td id="T_df9a1_row0_col0" class="data row0 col0" >49386.533377</td>
+      <td id="T_df9a1_row0_col1" class="data row0 col1" >0.000000</td>
+    </tr>
+    <tr>
+      <th id="T_df9a1_level0_row1" class="row_heading level0 row1" >Volatilidad_14d</th>
+      <td id="T_df9a1_row1_col0" class="data row1 col0" >24143.363794</td>
+      <td id="T_df9a1_row1_col1" class="data row1 col1" >0.000000</td>
+    </tr>
+    <tr>
+      <th id="T_df9a1_level0_row2" class="row_heading level0 row2" >Volatilidad_21d</th>
+      <td id="T_df9a1_row2_col0" class="data row2 col0" >13931.461281</td>
+      <td id="T_df9a1_row2_col1" class="data row2 col1" >0.000000</td>
+    </tr>
+    <tr>
+      <th id="T_df9a1_level0_row3" class="row_heading level0 row3" >Volatilidad_28d</th>
+      <td id="T_df9a1_row3_col0" class="data row3 col0" >9325.456928</td>
+      <td id="T_df9a1_row3_col1" class="data row3 col1" >0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Luego de aplicar el test de Jarque Bera correspondiente al análisis de la distribución de los datos, obtuvimos como resultado que ninguna de las series correspondientes a cada ventana siguen una distribución normal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skew_results</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">d&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">]:</span>
     <span class="n">skew_results</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
@@ -1555,34 +1663,34 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
-#T_b6fae_row0_col0, #T_b6fae_row0_col1, #T_b6fae_row1_col0, #T_b6fae_row1_col1, #T_b6fae_row2_col0, #T_b6fae_row2_col1, #T_b6fae_row3_col0, #T_b6fae_row3_col1 {
+#T_16d51_row0_col0, #T_16d51_row0_col1, #T_16d51_row1_col0, #T_16d51_row1_col1, #T_16d51_row2_col0, #T_16d51_row2_col1, #T_16d51_row3_col0, #T_16d51_row3_col1 {
   text-align: center;
   font-size: 12pt;
 }
 </style>
-<table id="T_b6fae">
+<table id="T_16d51">
   <thead>
     <tr>
-      <th id="T_b6fae_level0_col0" class="col_heading level0 col0" >Variable</th>
-      <th id="T_b6fae_level0_col1" class="col_heading level0 col1" >Asimetría (Skewness)</th>
+      <th id="T_16d51_level0_col0" class="col_heading level0 col0" >Variable</th>
+      <th id="T_16d51_level0_col1" class="col_heading level0 col1" >Asimetría (Skewness)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_b6fae_row0_col0" class="data row0 col0" >Volatilidad_7d</td>
-      <td id="T_b6fae_row0_col1" class="data row0 col1" >2.927654</td>
+      <td id="T_16d51_row0_col0" class="data row0 col0" >Volatilidad_7d</td>
+      <td id="T_16d51_row0_col1" class="data row0 col1" >2.927654</td>
     </tr>
     <tr>
-      <td id="T_b6fae_row1_col0" class="data row1 col0" >Volatilidad_14d</td>
-      <td id="T_b6fae_row1_col1" class="data row1 col1" >2.567215</td>
+      <td id="T_16d51_row1_col0" class="data row1 col0" >Volatilidad_14d</td>
+      <td id="T_16d51_row1_col1" class="data row1 col1" >2.567215</td>
     </tr>
     <tr>
-      <td id="T_b6fae_row2_col0" class="data row2 col0" >Volatilidad_21d</td>
-      <td id="T_b6fae_row2_col1" class="data row2 col1" >2.301968</td>
+      <td id="T_16d51_row2_col0" class="data row2 col0" >Volatilidad_21d</td>
+      <td id="T_16d51_row2_col1" class="data row2 col1" >2.301968</td>
     </tr>
     <tr>
-      <td id="T_b6fae_row3_col0" class="data row3 col0" >Volatilidad_28d</td>
-      <td id="T_b6fae_row3_col1" class="data row3 col1" >2.141476</td>
+      <td id="T_16d51_row3_col0" class="data row3 col0" >Volatilidad_28d</td>
+      <td id="T_16d51_row3_col1" class="data row3 col1" >2.141476</td>
     </tr>
   </tbody>
 </table>
@@ -1619,27 +1727,10 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <img alt="_images/56da0910d14233caf9e02598d2301ebb3790b05f8c2bf059ca22cbe0be249e17.png" src="_images/56da0910d14233caf9e02598d2301ebb3790b05f8c2bf059ca22cbe0be249e17.png" />
 </div>
 </div>
-<p>En todas las ventanas temporales analizadas, el valor de la asimetría resulta positivo, con valores que van desde <strong>2.93</strong> en la ventana de 7 días hasta <strong>2.14</strong> en la de 28 días. Esta asimetría positiva muestra que la distribución de la volatilidad y presenta una cola pesada hacia la derecha. Lo anterior se evidencia también en los histogramas graficados para cada ventana. Además, se observa una disminución progresiva a medida que aumenta la ventana, lo cual sugiere que los eventos extremos de alta volatilidad tienen mayor impacto en los plazos cortos, pero se suavizan al calcular promedios en horizontes más largos.</p>
+<p>Para todas las ventanas temporales analizadas, se comprobó que ninguna serie sigue una distribución normal. Esto se complementa con el valor del test de asimetría donde se hallaron valores que van desde <strong>2.93</strong> en la ventana de 7 días hasta <strong>2.14</strong> en la de 28 días. Esta asimetría positiva muestra que la distribución de la volatilidad presenta una cola pesada hacia la derecha. Lo anterior se evidencia también en los histogramas graficados para cada ventana. Además, se observa una disminución progresiva a medida que aumenta la ventana, lo cual sugiere que los eventos extremos de alta volatilidad tienen mayor impacto en los plazos cortos, pero se suavizan al calcular promedios en horizontes más largos.</p>
 </section>
 <section id="volatilidades-por-ventanas">
 <h5><strong>Volatilidades por ventanas</strong><a class="headerlink" href="#volatilidades-por-ventanas" title="Link to this heading">#</a></h5>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temporal</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="n">volatilidad_cols</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-
-<span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">temporal</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;crest&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.2f&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Correlación entre volatilidades (7, 14, 21, 28 días)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/a7580d4f0a44f8095386e3da436f3ab7e48521a1f6d6fd93590bb723ba859225.png" src="_images/a7580d4f0a44f8095386e3da436f3ab7e48521a1f6d6fd93590bb723ba859225.png" />
-</div>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#8ecae6&#39;</span><span class="p">,</span> <span class="s1">&#39;#023047&#39;</span><span class="p">,</span> <span class="s1">&#39;#dd1c1a&#39;</span><span class="p">,</span> <span class="s1">&#39;#fb8500&#39;</span><span class="p">]</span>
@@ -1689,14 +1780,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <span class="n">heatmap_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">&quot;Ventana (días)&quot;</span><span class="p">:</span> <span class="n">resultados_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
     <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_r&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Ventana (días)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># transponer para que las ventanas sean columnas</span>
+<span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Ventana (días)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  
 
 <span class="c1"># Heatmap</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
     <span class="n">heatmap_data</span><span class="p">,</span> 
     <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>  <span class="c1"># paleta más estética</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>  
     <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
     <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3f&quot;</span><span class="p">,</span> 
     <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
@@ -1722,10 +1813,10 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Precio vs Volatilidad Anualizada por Ventana de Días&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Precio vs Volatilidad Anualizada por Ventana de Días&#39;</span><span class="p">,</span> 
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">volatilidad_cols</span><span class="p">,</span> <span class="n">ventanas</span><span class="p">):</span>
-    <span class="n">corr</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
         <span class="n">x</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;Precio&#39;</span><span class="p">],</span>
         <span class="n">y</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
@@ -1733,9 +1824,12 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#219ebc&quot;</span>
     <span class="p">)</span>
+    
+    <span class="n">r_s</span> <span class="o">=</span> <span class="n">resultados</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ventana</span><span class="p">)][</span><span class="s2">&quot;Spearman_r&quot;</span><span class="p">]</span>
+    
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Precio (USD)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Volatilidad Anualizada&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días (Correlación: </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días (ρ = </span><span class="si">{</span><span class="n">r_s</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1743,7 +1837,61 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b6905c99cbe9992c9ce747a5ee7f849f15754accc7d6103ace6af64c73676271.png" src="_images/b6905c99cbe9992c9ce747a5ee7f849f15754accc7d6103ace6af64c73676271.png" />
+<img alt="_images/00aca669bafd301ed7c0438aca7e089ee678b4967337adbfd4c76977ef7c8f2e.png" src="_images/00aca669bafd301ed7c0438aca7e089ee678b4967337adbfd4c76977ef7c8f2e.png" />
+</div>
+</div>
+<p>Los coeficientes de correlación de Spearman (rho) obtenidos para las ventanas de 7, 14, 21 y 28 días (<strong>-0.037, -0.075, -0.103 y -0.123</strong>, respectivamente) reflejan una relación débil y no significativa entre los precios de cierre y la volatilidad en cada periodo. Este comportamiento coincide con lo observado en los gráficos de dispersión, donde no se evidencia una tendencia clara. Además, el signo negativo de los coeficientes sugiere una relación inversa: a medida que los precios aumentan, la volatilidad tiende a disminuir, aunque este efecto es insignificante.</p>
+</section>
+<section id="correlacion-de-la-volatilidad-por-ventanas-con-el-valor-absoluto-de-los-retornos-logaritmicos">
+<h5><strong>Correlación de la Volatilidad (por ventanas) con el Valor Absoluto de los Retornos Logarítmicos</strong><a class="headerlink" href="#correlacion-de-la-volatilidad-por-ventanas-con-el-valor-absoluto-de-los-retornos-logaritmicos" title="Link to this heading">#</a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">retornosabs</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+<span class="n">retornosabs</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;AbsRetornoLog&#39;</span>  <span class="c1"># Asignar nombre para facilitar el acceso</span>
+
+<span class="n">resultados</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">volatilidad_cols</span><span class="p">,</span> <span class="n">ventanas</span><span class="p">):</span>
+    <span class="n">temporal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">retornosabs</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+    <span class="n">r_s</span><span class="p">,</span> <span class="n">p_s</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">temporal</span><span class="p">[</span><span class="s1">&#39;AbsRetornoLog&#39;</span><span class="p">],</span> <span class="n">temporal</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+    <span class="n">resultados</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Spearman_r&quot;</span><span class="p">:</span> <span class="n">r_s</span><span class="p">,</span>
+        <span class="s2">&quot;Spearman_p&quot;</span><span class="p">:</span> <span class="n">p_s</span>
+    <span class="p">}</span>
+
+<span class="n">resultados_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">resultados</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_r&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_r&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+<span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_p&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_p&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+
+<span class="n">heatmap_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Ventana (días)&quot;</span><span class="p">:</span> <span class="n">resultados_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+    <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="n">resultados_df</span><span class="p">[</span><span class="s2">&quot;Spearman_r&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Ventana (días)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">heatmap_data</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;GnBu&quot;</span><span class="p">,</span>
+    <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3f&quot;</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+    <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Coeficiente de Correlación (ρ)&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Correlación Spearman entre Volatilidad y Retornos Logarítmicos Absolutos&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Ventana de Volatilidad (días)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ef2bbe8a3c51523becfbbb9279a68ab869c547fcea1ecb6e2a2ddd061a79ac11.png" src="_images/ef2bbe8a3c51523becfbbb9279a68ab869c547fcea1ecb6e2a2ddd061a79ac11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1751,15 +1899,16 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Volatilidad Anualizada vs. Valor Absoluto de los Retornos&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Gráfico de Dispersión: Volatilidad Anualizada vs. Valor Absoluto de los Retornos&#39;</span><span class="p">,</span> 
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">volatilidad_cols</span><span class="p">):</span>
-    <span class="c1"># Calcular la correlación para el título</span>
-    <span class="n">corr</span> <span class="o">=</span> <span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+    <span class="c1"># Calcular correlación de Spearman</span>
+    <span class="n">r_s</span><span class="p">,</span> <span class="n">p_s</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s2">&quot;omit&quot;</span><span class="p">)</span>
     
-    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="s1">&#39;RetornoLog&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">(),</span> <span class="n">y</span><span class="o">=</span><span class="n">databtc</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#219ebc&quot;</span><span class="p">)</span>
     
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana de </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> (Correlación: </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ventana </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> (ρ = </span><span class="si">{</span><span class="n">r_s</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Valor Absoluto de Retornos Logarítmicos&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Volatilidad </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
@@ -1769,7 +1918,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b2b01dfb269008af6466be4b5ed67689c62490cb4ddd382d21f2bced162bc30e.png" src="_images/b2b01dfb269008af6466be4b5ed67689c62490cb4ddd382d21f2bced162bc30e.png" />
+<img alt="_images/926b3172d350ffb8d18c7967d63edb64742b49b392a8f837dc8256346aeb9409.png" src="_images/926b3172d350ffb8d18c7967d63edb64742b49b392a8f837dc8256346aeb9409.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1814,14 +1963,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th></th>
       <th>Precio</th>
       <th>RetornoLog</th>
-      <th>Volatilidad</th>
+      <th>Volatilidad_7d</th>
+      <th>Volatilidad_14d</th>
+      <th>Volatilidad_21d</th>
+      <th>Volatilidad_28d</th>
       <th>Precio_lag_1</th>
       <th>Precio_lag_2</th>
       <th>Precio_lag_3</th>
       <th>Precio_lag_4</th>
-      <th>Precio_lag_5</th>
-      <th>Precio_lag_6</th>
-      <th>Precio_lag_7</th>
       <th>...</th>
       <th>Precio_lag_19</th>
       <th>Precio_lag_20</th>
@@ -1861,10 +2010,10 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
   </thead>
   <tbody>
     <tr>
-      <th>2018-01-22</th>
-      <td>10760.05</td>
-      <td>-0.069112</td>
-      <td>1.274857</td>
+      <th>2018-01-02</th>
+      <td>14675.11</td>
+      <td>0.092392</td>
+      <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1885,38 +2034,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-01-23</th>
-      <td>10799.18</td>
-      <td>0.003630</td>
-      <td>1.220627</td>
-      <td>10760.05</td>
+      <th>2018-01-03</th>
+      <td>14919.51</td>
+      <td>0.016517</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2018-01-24</th>
-      <td>11349.99</td>
-      <td>0.049747</td>
-      <td>1.236625</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>14675.11</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1933,15 +2058,15 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-01-25</th>
-      <td>11175.27</td>
-      <td>-0.015514</td>
-      <td>1.233956</td>
-      <td>11349.99</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
+      <th>2018-01-04</th>
+      <td>15059.54</td>
+      <td>0.009342</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>...</td>
@@ -1957,17 +2082,41 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2018-01-26</th>
-      <td>11089.00</td>
-      <td>-0.007750</td>
-      <td>1.135968</td>
-      <td>11175.27</td>
-      <td>11349.99</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
+      <th>2018-01-05</th>
+      <td>16960.39</td>
+      <td>0.118869</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>15059.54</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2018-01-06</th>
+      <td>17069.79</td>
+      <td>0.006430</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>16960.39</td>
+      <td>15059.54</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
       <td>...</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2008,14 +2157,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-02</th>
       <td>99796.00</td>
       <td>-0.024038</td>
+      <td>0.265594</td>
+      <td>0.354262</td>
       <td>0.372853</td>
+      <td>0.399660</td>
       <td>102224.00</td>
       <td>102429.56</td>
       <td>104722.94</td>
       <td>103733.24</td>
-      <td>101335.52</td>
-      <td>102082.83</td>
-      <td>102620.00</td>
       <td>...</td>
       <td>96560.86</td>
       <td>94536.10</td>
@@ -2032,14 +2181,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-03</th>
       <td>94495.21</td>
       <td>-0.054579</td>
+      <td>0.404198</td>
+      <td>0.419439</td>
       <td>0.422263</td>
+      <td>0.414272</td>
       <td>99796.00</td>
       <td>102224.00</td>
       <td>102429.56</td>
       <td>104722.94</td>
-      <td>103733.24</td>
-      <td>101335.52</td>
-      <td>102082.83</td>
       <td>...</td>
       <td>100497.35</td>
       <td>96560.86</td>
@@ -2056,14 +2205,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-04</th>
       <td>101367.77</td>
       <td>0.070206</td>
+      <td>0.635541</td>
+      <td>0.453239</td>
       <td>0.483048</td>
+      <td>0.439063</td>
       <td>94495.21</td>
       <td>99796.00</td>
       <td>102224.00</td>
       <td>102429.56</td>
-      <td>104722.94</td>
-      <td>103733.24</td>
-      <td>101335.52</td>
       <td>...</td>
       <td>99987.30</td>
       <td>100497.35</td>
@@ -2080,14 +2229,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-05</th>
       <td>97589.30</td>
       <td>-0.037987</td>
+      <td>0.647446</td>
+      <td>0.469846</td>
       <td>0.481974</td>
+      <td>0.450602</td>
       <td>101367.77</td>
       <td>94495.21</td>
       <td>99796.00</td>
       <td>102224.00</td>
-      <td>102429.56</td>
-      <td>104722.94</td>
-      <td>103733.24</td>
       <td>...</td>
       <td>104077.48</td>
       <td>99987.30</td>
@@ -2104,14 +2253,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-06</th>
       <td>98329.13</td>
       <td>0.007552</td>
+      <td>0.645250</td>
+      <td>0.471895</td>
       <td>0.482743</td>
+      <td>0.442617</td>
       <td>97589.30</td>
       <td>101367.77</td>
       <td>94495.21</td>
       <td>99796.00</td>
-      <td>102224.00</td>
-      <td>102429.56</td>
-      <td>104722.94</td>
       <td>...</td>
       <td>104556.23</td>
       <td>104077.48</td>
@@ -2126,7 +2275,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
     </tr>
   </tbody>
 </table>
-<p>2573 rows × 31 columns</p>
+<p>2593 rows × 34 columns</p>
 </div></div></div>
 </div>
 </section>
@@ -2162,14 +2311,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th></th>
       <th>Precio</th>
       <th>RetornoLog</th>
-      <th>Volatilidad</th>
+      <th>Volatilidad_7d</th>
+      <th>Volatilidad_14d</th>
+      <th>Volatilidad_21d</th>
+      <th>Volatilidad_28d</th>
       <th>Precio_lag_1</th>
       <th>Precio_lag_2</th>
       <th>Precio_lag_3</th>
       <th>Precio_lag_4</th>
-      <th>Precio_lag_5</th>
-      <th>Precio_lag_6</th>
-      <th>Precio_lag_7</th>
       <th>...</th>
       <th>Precio_lag_26</th>
       <th>Precio_lag_27</th>
@@ -2209,10 +2358,10 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
   </thead>
   <tbody>
     <tr>
-      <th>2018-01-22</th>
-      <td>10760.05</td>
-      <td>-0.069112</td>
-      <td>1.274857</td>
+      <th>2018-01-02</th>
+      <td>14675.11</td>
+      <td>0.092392</td>
+      <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2224,23 +2373,23 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>10799.18</td>
-      <td>11349.99</td>
-      <td>11175.27</td>
-      <td>11089.00</td>
-      <td>11491.00</td>
-      <td>11879.95</td>
-      <td>11251.00</td>
+      <td>14919.51</td>
+      <td>15059.54</td>
+      <td>16960.39</td>
+      <td>17069.79</td>
+      <td>16150.03</td>
+      <td>14902.54</td>
+      <td>14400.00</td>
     </tr>
     <tr>
-      <th>2018-01-23</th>
-      <td>10799.18</td>
-      <td>0.003630</td>
-      <td>1.220627</td>
-      <td>10760.05</td>
+      <th>2018-01-03</th>
+      <td>14919.51</td>
+      <td>0.016517</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>14675.11</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -2248,85 +2397,85 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>11349.99</td>
-      <td>11175.27</td>
-      <td>11089.00</td>
-      <td>11491.00</td>
-      <td>11879.95</td>
-      <td>11251.00</td>
-      <td>10237.51</td>
+      <td>15059.54</td>
+      <td>16960.39</td>
+      <td>17069.79</td>
+      <td>16150.03</td>
+      <td>14902.54</td>
+      <td>14400.00</td>
+      <td>14907.09</td>
     </tr>
     <tr>
-      <th>2018-01-24</th>
-      <td>11349.99</td>
-      <td>0.049747</td>
-      <td>1.236625</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
+      <th>2018-01-04</th>
+      <td>15059.54</td>
+      <td>0.009342</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>11175.27</td>
-      <td>11089.00</td>
-      <td>11491.00</td>
-      <td>11879.95</td>
-      <td>11251.00</td>
-      <td>10237.51</td>
-      <td>10285.10</td>
+      <td>16960.39</td>
+      <td>17069.79</td>
+      <td>16150.03</td>
+      <td>14902.54</td>
+      <td>14400.00</td>
+      <td>14907.09</td>
+      <td>13238.78</td>
     </tr>
     <tr>
-      <th>2018-01-25</th>
-      <td>11175.27</td>
-      <td>-0.015514</td>
-      <td>1.233956</td>
-      <td>11349.99</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
+      <th>2018-01-05</th>
+      <td>16960.39</td>
+      <td>0.118869</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>15059.54</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
       <td>NaN</td>
       <td>...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>11089.00</td>
-      <td>11491.00</td>
-      <td>11879.95</td>
-      <td>11251.00</td>
-      <td>10237.51</td>
-      <td>10285.10</td>
-      <td>9224.52</td>
+      <td>17069.79</td>
+      <td>16150.03</td>
+      <td>14902.54</td>
+      <td>14400.00</td>
+      <td>14907.09</td>
+      <td>13238.78</td>
+      <td>13740.01</td>
     </tr>
     <tr>
-      <th>2018-01-26</th>
-      <td>11089.00</td>
-      <td>-0.007750</td>
-      <td>1.135968</td>
-      <td>11175.27</td>
-      <td>11349.99</td>
-      <td>10799.18</td>
-      <td>10760.05</td>
+      <th>2018-01-06</th>
+      <td>17069.79</td>
+      <td>0.006430</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>16960.39</td>
+      <td>15059.54</td>
+      <td>14919.51</td>
+      <td>14675.11</td>
       <td>...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>11491.00</td>
-      <td>11879.95</td>
-      <td>11251.00</td>
-      <td>10237.51</td>
-      <td>10285.10</td>
-      <td>9224.52</td>
-      <td>8873.03</td>
+      <td>16150.03</td>
+      <td>14902.54</td>
+      <td>14400.00</td>
+      <td>14907.09</td>
+      <td>13238.78</td>
+      <td>13740.01</td>
+      <td>14210.00</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2356,14 +2505,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-02</th>
       <td>99796.00</td>
       <td>-0.024038</td>
+      <td>0.265594</td>
+      <td>0.354262</td>
       <td>0.372853</td>
+      <td>0.399660</td>
       <td>102224.00</td>
       <td>102429.56</td>
       <td>104722.94</td>
       <td>103733.24</td>
-      <td>101335.52</td>
-      <td>102082.83</td>
-      <td>102620.00</td>
       <td>...</td>
       <td>96954.61</td>
       <td>102235.60</td>
@@ -2380,14 +2529,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-03</th>
       <td>94495.21</td>
       <td>-0.054579</td>
+      <td>0.404198</td>
+      <td>0.419439</td>
       <td>0.422263</td>
+      <td>0.414272</td>
       <td>99796.00</td>
       <td>102224.00</td>
       <td>102429.56</td>
       <td>104722.94</td>
-      <td>103733.24</td>
-      <td>101335.52</td>
-      <td>102082.83</td>
       <td>...</td>
       <td>95060.61</td>
       <td>96954.61</td>
@@ -2404,14 +2553,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-04</th>
       <td>101367.77</td>
       <td>0.070206</td>
+      <td>0.635541</td>
+      <td>0.453239</td>
       <td>0.483048</td>
+      <td>0.439063</td>
       <td>94495.21</td>
       <td>99796.00</td>
       <td>102224.00</td>
       <td>102429.56</td>
-      <td>104722.94</td>
-      <td>103733.24</td>
-      <td>101335.52</td>
       <td>...</td>
       <td>92552.49</td>
       <td>95060.61</td>
@@ -2428,14 +2577,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-05</th>
       <td>97589.30</td>
       <td>-0.037987</td>
+      <td>0.647446</td>
+      <td>0.469846</td>
       <td>0.481974</td>
+      <td>0.450602</td>
       <td>101367.77</td>
       <td>94495.21</td>
       <td>99796.00</td>
       <td>102224.00</td>
-      <td>102429.56</td>
-      <td>104722.94</td>
-      <td>103733.24</td>
       <td>...</td>
       <td>94726.11</td>
       <td>92552.49</td>
@@ -2452,14 +2601,14 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
       <th>2025-02-06</th>
       <td>98329.13</td>
       <td>0.007552</td>
+      <td>0.645250</td>
+      <td>0.471895</td>
       <td>0.482743</td>
+      <td>0.442617</td>
       <td>97589.30</td>
       <td>101367.77</td>
       <td>94495.21</td>
       <td>99796.00</td>
-      <td>102224.00</td>
-      <td>102429.56</td>
-      <td>104722.94</td>
       <td>...</td>
       <td>94599.99</td>
       <td>94726.11</td>
@@ -2474,7 +2623,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
     </tr>
   </tbody>
 </table>
-<p>2573 rows × 38 columns</p>
+<p>2593 rows × 41 columns</p>
 </div></div></div>
 </div>
 </section>
@@ -2564,6 +2713,7 @@ r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Distribución de los datos</strong></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#volatilidades-por-ventanas"><strong>Volatilidades por ventanas</strong></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-precio-con-volatilidad-por-ventanas"><strong>Correlación de Precio con Volatilidad (por ventanas)</strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#correlacion-de-la-volatilidad-por-ventanas-con-el-valor-absoluto-de-los-retornos-logaritmicos"><strong>Correlación de la Volatilidad (por ventanas) con el Valor Absoluto de los Retornos Logarítmicos</strong></a></li>
 </ul>
 </li>
 </ul>
